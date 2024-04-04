@@ -1,11 +1,13 @@
 import { SignJWT, jwtVerify } from 'jose'
 
-type Payload = Record<string, unknown>
+type Payload = Record<string, string>
 
 const encoder = new TextEncoder()
 const secret = encoder.encode(process.env.JWTKEY || 'secret')
 
-const createJWT = async (payload: Payload, expirationTime: string) => {
+// → CREATE A JWT
+
+export const createJWT = async (payload: Payload, expirationTime: string) => {
 	try {
 		const jwtConstructor = new SignJWT(payload)
 		const jwt = await jwtConstructor
@@ -20,14 +22,13 @@ const createJWT = async (payload: Payload, expirationTime: string) => {
 	}
 }
 
-const readJWT = async (token: string) => {
+// → READ A JWT AND CHECK IF IT IS VALID
+
+export const readJWT = async (token: string) => {
 	try {
 		const data = await jwtVerify(token, secret)
-		return { isValid: true, ...data }
+		return { isValid: true, payload: data.payload as Payload }
 	} catch (e) {
-		console.log(['READ JWT ERROR', e])
 		return { isValid: false }
 	}
 }
-
-export { createJWT, readJWT }
