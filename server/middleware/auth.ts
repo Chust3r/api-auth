@@ -22,6 +22,9 @@ export default eventHandler(async (event) => {
 		// → CHECK IF JWT AND REFRESH TOKEN ARE VALID
 
 		if (jwt.isValid && refresh.isValid) {
+			event.context.payload = {
+				id: jwt.payload?.id,
+			}
 			return
 		}
 
@@ -51,6 +54,12 @@ export default eventHandler(async (event) => {
 		setCookie(event, 'Refresh', newRefresh, {
 			httpOnly: true,
 		})
+
+		// → SET USER ID
+
+		event.context.payload = {
+			id,
+		}
 	} catch (e) {
 		console.log(['AUTH MIDDLWARE ERROR', e])
 		return Response.json({ message: 'Server Error' }, { status: 500 })

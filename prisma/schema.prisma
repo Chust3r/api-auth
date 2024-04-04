@@ -17,26 +17,15 @@ model User {
   password         String
   emailVerified    Boolean           @default(false)
   Session          Session[]
-  RefreshToken     RefreshToken[]
   verificationCode VerificationCode?
 }
 
 model Session {
-  id           String   @id @default(uuid())
+  id           String @id @default(uuid())
   userId       String
-  token        String   @unique
-  refreshToken String   @unique
-  expiresAt    DateTime
-  user         User     @relation(fields: [userId], references: [id])
-}
-
-model RefreshToken {
-  id        String   @id @default(uuid())
-  userId    String
-  token     String   @unique
-  expiresAt DateTime
-
-  user User @relation(fields: [userId], references: [id])
+  token        String @unique
+  refreshToken String @unique
+  user         User   @relation(fields: [userId], references: [id])
 }
 
 model VerificationCode {

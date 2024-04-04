@@ -42,9 +42,9 @@ export default eventHandler(async (event) => {
 
 		// → CREATE A JWT & REFRESH TOKEN
 
-		const jwt = await createJWT({ id: user.id }, JWT_EXP)
+		const jwt = await createJWT({ id }, JWT_EXP)
 
-		const refresh = await createJWT({ id: user.id }, REFRESH_EXP)
+		const refresh = await createJWT({ id }, REFRESH_EXP)
 
 		//→ SET COOKIE
 
